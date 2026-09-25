@@ -1,0 +1,18 @@
+# Mobile Gallery Lucky Draw - Apache Security & Rewrites
+Options -Indexes
+
+# UTF-8 Encoding
+AddDefaultCharset UTF-8
+
+# Protect sensitive database & system configuration files
+<FilesMatch "\.(sql|sqlite|log|ini|env|sh)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block direct web access to config & includes directory
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^config/ - [F,L]
+    RewriteRule ^includes/ - [F,L]
+</IfModule>

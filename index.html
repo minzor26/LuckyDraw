@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Gallery - Lucky Draw / Prize Wheel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container header-content">
+            <div class="brand-title-group">
+                <div class="brand-logo-icon">📱</div>
+                <div>
+                    <h1 class="brand-name">MOBILE GALLERY</h1>
+                    <div class="brand-subtitle">LUCKY DRAW • भाग्य आज़माएँ</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="btnSoundToggle" class="btn-icon">🔊 Sound On</button>
+                <a href="admin/index.php" class="btn-admin-link">🔒 Admin Login</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-wrapper">
+        <div class="container">
+            <div class="lucky-draw-card">
+                
+                <div class="hero-heading">
+                    <div class="hindi-title">🎉 आपका स्वागत है! कूपन नंबर डालकर स्पिन करें 🎉</div>
+                    <h2 class="english-title">GRAND FESTIVE PRIZE WHEEL</h2>
+                </div>
+
+                <!-- Prize Wheel Section -->
+                <div class="wheel-section">
+                    <!-- Top Pointer Indicator -->
+                    <div class="wheel-pointer">
+                        <svg viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 50L0 0H40L20 50Z" fill="#FFDF00"/>
+                            <path d="M20 42L5 3H35L20 42Z" fill="#E12826"/>
+                        </svg>
+                    </div>
+
+                    <div class="wheel-outer-ring">
+                        <!-- Decorative lights -->
+                        <div class="wheel-light" style="top: 2%; left: 50%;"></div>
+                        <div class="wheel-light" style="top: 15%; left: 85%;"></div>
+                        <div class="wheel-light" style="top: 50%; left: 98%;"></div>
+                        <div class="wheel-light" style="top: 85%; left: 85%;"></div>
+                        <div class="wheel-light" style="top: 98%; left: 50%;"></div>
+                        <div class="wheel-light" style="top: 85%; left: 15%;"></div>
+                        <div class="wheel-light" style="top: 50%; left: 2%;"></div>
+                        <div class="wheel-light" style="top: 15%; left: 15%;"></div>
+
+                        <canvas id="wheelCanvas"></canvas>
+                        
+                        <div class="wheel-center-cap">
+                            WIN<br>PRIZE
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interaction Panel -->
+                <div class="interaction-panel">
+                    <span class="input-label-hindi">कूपन नंबर दर्ज करें / Enter Coupon Number</span>
+                    
+                    <div class="form-group">
+                        <div class="input-with-btn">
+                            <input type="number" id="inputCouponNumber" class="coupon-input" placeholder="e.g. 357" min="1" max="9999" autocomplete="off">
+                            <button id="btnCheckCoupon" class="btn-check">Check Coupon</button>
+                        </div>
+                    </div>
+
+                    <!-- Customer Confirmation Box -->
+                    <div id="customerConfirmBox" class="customer-confirm-box">
+                        <div class="confirm-title">✅ Verified Customer Details</div>
+                        <div class="confirm-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Coupon No:</span>
+                                <span id="confirmCouponNo" class="detail-value">#357</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Customer Name:</span>
+                                <span id="confirmCustomerName" class="detail-value">Neha Jain</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Mobile Number:</span>
+                                <span id="confirmMobile" class="detail-value">99******57</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SPIN NOW CTA -->
+                    <button id="btnSpinNow" class="btn-spin-now" disabled>
+                        <span>🎰</span> SPIN NOW <span>🎰</span>
+                    </button>
+                </div>
+
+                <!-- Recent Winners Marquee -->
+                <div class="recent-winners-section">
+                    <div class="section-subtitle">
+                        <span>🏆</span> RECENT WINNERS / हाल ही के विजेता
+                    </div>
+                    <div id="recentWinnersGrid" class="winners-grid">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Celebration Result Modal -->
+    <div id="celebrationModal" class="celebration-modal-backdrop">
+        <div class="celebration-card">
+            <div id="resPrizeEmoji" class="celebration-emoji">🎉</div>
+            <div class="celebration-title-hindi">बधाई हो! CONGRATULATIONS!</div>
+            <div class="celebration-title-english">YOU HAVE WON A PRIZE!</div>
+
+            <div class="prize-result-box">
+                <div id="resPrizeName" class="prize-result-name">Bluetooth Headphones</div>
+                <div id="resPrizeType" class="prize-result-type-badge">REGULAR PRIZE</div>
+            </div>
+
+            <div class="winner-receipt-details">
+                <div class="receipt-row">
+                    <span>Coupon Number:</span>
+                    <strong id="resCouponNo">#357</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Customer Name:</span>
+                    <strong id="resCustomerName">Neha Jain</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Issued By:</span>
+                    <strong>Mobile Gallery Shop</strong>
+                </div>
+            </div>
+
+            <div class="modal-btn-group">
+                <button id="btnPrintResult" class="btn-modal-action btn-modal-secondary">🖨️ Print Receipt</button>
+                <button id="btnCloseModal" class="btn-modal-action btn-modal-primary">🔄 Back to Lucky Draw</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container">
+            <p>&copy; 2026 Mobile Gallery. All rights reserved. Powered by Antigravity Lucky Draw System.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/confetti.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
